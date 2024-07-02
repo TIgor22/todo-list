@@ -11,7 +11,7 @@ class TagForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
 
-    created = forms.DateTimeField(
+    deadline = forms.DateTimeField(
         widget=forms.DateTimeInput(
             attrs={"type": "datetime-local"}
         )
