@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from todo_list_app.forms import TagForm, TaskForm
@@ -49,7 +50,21 @@ class TaskUpdateView(generic.UpdateView):
     success_url = reverse_lazy("todo_list_app:task-list")
     form_class = TaskForm
 
+
 class TaskDeleteView(generic.DeleteView):
     model = Task
     template_name = "todo_list/task_confirm_delete.html"
     success_url = reverse_lazy("todo_list_app:task-list")
+
+
+class TaskCompletedView(generic.View):
+    model = Task
+
+    def post(self, request, pk: int) -> HttpResponseRedirect:
+        task = get_object_or_404(Task, pk=pk)
+        task.is_completed = not task.is_completed
+        task.save()
+
+        return HttpResponseRedirect(
+            reverse("todo_list_app:task-list")
+        )

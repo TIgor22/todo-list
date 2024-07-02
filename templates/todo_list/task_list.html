@@ -10,6 +10,14 @@
   {% if task_list %}
     {% for task in task_list %}
       <div>
+        <form class="float-right" action="{% url 'todo_list_app:task-completed' pk=task.pk %}" method="post">
+          {% csrf_token %}
+          {% if task.is_completed == False %}
+            <input type="submit" value="Completed" class="btn btn-success">
+          {% else %}
+            <input type="submit" value="Undo" class="btn btn-secondary">
+          {% endif %}
+        </form>
         <p class="font-weight-bold">
           {{ task.content }}
           {% if task.is_completed == True %}
